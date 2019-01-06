@@ -101,10 +101,8 @@ gcc"
 for f in $packages
 do
 	echo "${EchoInfo}Installation du paquet $f ${Color_Off}"
-	apt-get install -qq -y $f
+	apt-get install -qq -y $f > /dev/null
 done
-
-exit
 
 echo "${EchoInfo}Installation de nodejs...${Color_Off}"
 apt-get -qq -y install postgresql
