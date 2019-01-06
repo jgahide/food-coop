@@ -84,20 +84,27 @@ if [ $(id -u) !=  0 ]; then
 fi
 
 echo "${EchoInfo}Assurons nous que Debian est bien à jour.${Color_Off}"
-apt-get update
+apt-get -qq update
 apt-get -qq -y upgrade
 
 echo "${EchoInfo}Installation des outils système...${Color_Off}"
 apt-get -qq -y install vim git
 
 echo "${EchoInfo}Installation des paquets nécéssaire pour l'execution de pip install ...${Color_Off}"
-apt-get -qq -y install python-pip
-apt-get -qq -y install python-dev
-apt-get -qq -y install python-setuptools
-apt-get -qq -y install libjpeg62-turbo-dev zlib1g-dev
-apt-get -qq -y install libsasl2-dev python-dev libldap2-dev libssl-dev
-apt-get -qq -y install libxml2-dev libxslt1-dev
-apt-get install gcc
+
+packages="python-pip python-dev python-setuptools
+libjpeg62-turbo-dev zlib1g-dev
+libsasl2-dev libldap2-dev libssl-dev
+libxml2-dev libxslt1-dev
+gcc"
+
+for f in $packages
+do
+	echo "${EchoInfo}Installation du paquet $f ${Color_Off}"
+	apt-get install -qq -y $f
+done
+
+exit
 
 echo "${EchoInfo}Installation de nodejs...${Color_Off}"
 apt-get -qq -y install postgresql
@@ -111,8 +118,12 @@ echo "${EchoInfo}npm version : $(npm -v) ${Color_Off}"
 echo "${EchoInfo}Using npm to install less...${Color_Off}"
 npm install -g less
 
-echo "${EchoInfo}Ajout de l'utilisateur Odoo dans le système.${Color_Off}"
-adduser odoo
+if [ grep -c '^username:' /etc/passwd == 0 ]; then
+	echo "${EchoInfo}Ajout de l'utilisateur Odoo dans le système.${Color_Off}"
+	adduser odoo
+else
+	echo "${EchoInfo}L'utilisateur Odoo existe déjà, étape sautée.${Color_Off}"
+fi
 
 echo "${EchoInfo}Ajout de l'utilisateur Odoo dans la base de donnée.${Color_Off}"
 sudo su - postgres -c "createuser -s odoo"
