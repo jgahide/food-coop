@@ -74,23 +74,23 @@ On_ICyan='\033[0;106m'    # Cyan
 On_IWhite='\033[0;107m'   # White
 
 
-EchoColor=$Cyan
+EchoInfo=$Cyan
+EchoError=$Red
 
 # On s'assure que seul root peut executer ce script.
-if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root" 1>&2
-   echo "${EchoColor}Le script d'installation d'odoo saveur La louve doit être executé en tant que super utilisateur (root). $(Color_Off)"
+if [ $(id -u) !=  0 ]; then
+   echo "${EchoError}Le script d'installation d'odoo saveur La louve doit être executé en tant que super utilisateur (root). ${Color_Off}"
    exit 1
 fi
 
-echo "${EchoColor}Assurons nous que Debian est bien à jour.${Color_Off}"
+echo "${EchoInfo}Assurons nous que Debian est bien à jour.${Color_Off}"
 apt-get update
 apt-get -qq -y upgrade
 
-echo "${EchoColor}Installation des outils système...${Color_Off}"
+echo "${EchoInfo}Installation des outils système...${Color_Off}"
 apt-get -qq -y install vim git
 
-echo "${EchoColor}Installation des paquets nécéssaire pour l'execution de pip install ...${Color_Off}"
+echo "${EchoInfo}Installation des paquets nécéssaire pour l'execution de pip install ...${Color_Off}"
 apt-get -qq -y install python-pip
 apt-get -qq -y install python-dev
 apt-get -qq -y install python-setuptools
@@ -98,32 +98,32 @@ apt-get -qq -y install libjpeg62-turbo-dev zlib1g-dev
 apt-get -qq -y install libsasl2-dev python-dev libldap2-dev libssl-dev
 apt-get -qq -y install libxml2-dev libxslt1-dev
 
-echo "${EchoColor}Installation de nodejs...${Color_Off}"
+echo "${EchoInfo}Installation de nodejs...${Color_Off}"
 apt-get -qq -y install postgresql
 apt-get -qq -y install curl software-properties-common
 curl -sL https://deb.nodesource.com/setup_10.x | sudo bash -
 apt-get -qq -y install nodejs
 
-echo "${EchoColor}Nodejs version : $(node -v) ${Color_Off}"
-echo "${EchoColor}npm version : $(npm -v) ${Color_Off}"
+echo "${EchoInfo}Nodejs version : $(node -v) ${Color_Off}"
+echo "${EchoInfo}npm version : $(npm -v) ${Color_Off}"
 
-echo "${EchoColor}Using npm to install less...${Color_Off}"
+echo "${EchoInfo}Using npm to install less...${Color_Off}"
 npm install -g less
 
-echo "${EchoColor}Ajout de l'utilisateur Odoo dans le système.${Color_Off}"
+echo "${EchoInfo}Ajout de l'utilisateur Odoo dans le système.${Color_Off}"
 adduser odoo
 
-echo "${EchoColor}Ajout de l'utilisateur Odoo dans la base de donnée.${Color_Off}"
+echo "${EchoInfo}Ajout de l'utilisateur Odoo dans la base de donnée.${Color_Off}"
 sudo su - postgres -c "createuser -s odoo"
 
 cd /home/odoo
-echo "${EchoColor}Téléchargement de Odoo La Louve (git)${Color_Off}"
+echo "${EchoInfo}Téléchargement de Odoo La Louve (git)${Color_Off}"
 su -c "git clone https://github.com/AwesomeFoodCoops/odoo-production.git" odoo
 cd /home/odoo/odoo-production/odoo/
 
-echo "${EchoColor}Installation des dependances pour Odoo${Color_Off}"
-su -c "pip install wheel" odoo
-su -c "pip install -r requirements.txt" odoo
+echo "${EchoInfo}Installation des dependances pour Odoo${Color_Off}"
+su -c "python -m pip install wheel" odoo
+su -c "python -m pip install -r requirements.txt" odoo
 
-echo "${EchoColor}Il est maintenant possible de lancer odoo avec la commande : ${Color_Off}"
-echo "${EchoColor}./odoo.py --addons-path=addons --db-filter=mydb$ ${Color_Off}"
+echo "${EchoInfo}Il est maintenant possible de lancer odoo avec la commande : ${Color_Off}"
+echo "${EchoInfo}/home/odoo/odoo-production/odoo/odoo.py --addons-path=addons --db-filter=mydb$ ${Color_Off}"
