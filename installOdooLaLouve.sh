@@ -97,6 +97,7 @@ apt-get -qq -y install python-setuptools
 apt-get -qq -y install libjpeg62-turbo-dev zlib1g-dev
 apt-get -qq -y install libsasl2-dev python-dev libldap2-dev libssl-dev
 apt-get -qq -y install libxml2-dev libxslt1-dev
+apt-get install gcc
 
 echo "${EchoInfo}Installation de nodejs...${Color_Off}"
 apt-get -qq -y install postgresql
