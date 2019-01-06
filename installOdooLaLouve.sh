@@ -76,6 +76,11 @@ On_IWhite='\033[0;107m'   # White
 
 EchoColor=$Cyan
 
+
+echo "${EchoColor}Assurons nous que Debian est bien à jour.${Color_Off}"
+apt-get update
+apt-get -qq -y upgrade
+
 echo "${EchoColor}Installation des outils système...${Color_Off}"
 apt-get -qq -y install vim git
 
