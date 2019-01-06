@@ -76,6 +76,12 @@ On_IWhite='\033[0;107m'   # White
 
 EchoColor=$Cyan
 
+# On s'assure que seul root peut executer ce script.
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 1>&2
+   echo "${EchoColor}Le script d'installation d'odoo saveur La louve doit être executé en tant que super utilisateur (root). $(Color_Off)"
+   exit 1
+fi
 
 echo "${EchoColor}Assurons nous que Debian est bien à jour.${Color_Off}"
 apt-get update
