@@ -96,7 +96,7 @@ packages="python-pip python-dev python-setuptools
 libjpeg62-turbo-dev zlib1g-dev
 libsasl2-dev libldap2-dev libssl-dev
 libxml2-dev libxslt1-dev
-gcc"
+gcc wkhtmltopdf"
 
 for f in $packages
 do
